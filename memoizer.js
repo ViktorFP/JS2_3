@@ -1,5 +1,13 @@
 (function(){
-	function factorial(n) {
+	function getIntArray(number,range){
+	var array=[];
+	for(var i=0;i<number;i++){
+		array[i]=Math.round(Math.random()*range);
+	}
+	return array;
+}
+
+function factorial(n) {
 		var res = 1;
 		while(n !== 1) {
 			res *= n--;
@@ -20,16 +28,16 @@
 			if (typeof func !== 'function'){		
 				throw 'ArgumentError: function expected';
 			}
-			var memo={};
+			var cache={};
 			return function(n){
 				var value;
-				if(n in memo){
-					value = memo[n];
+				if(n in cache){
+					value = cache[n];
 					}else{
 					value=func.apply(this, arguments);
-					memo[n] = value;
+					cache[n] = value;
 				}
-				console.log(value);
+				console.log(value);				
 				return value;
 			};
 		}
@@ -41,6 +49,8 @@
 	MemoizerModule.memoizer(factorial)(n);
 	
 	var str='string';
-	console.log('Reverse String \''+str+'\': ');
+	console.log('\nReverse String \''+str+'\': ');
 MemoizerModule.memoizer(reverseString)(str);
+console.log('\ngenerate array:');
+MemoizerModule.memoizer(getIntArray)(10,10);
 }());
