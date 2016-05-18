@@ -24,21 +24,19 @@ function factorial(n) {
 	}
 	
 	var MemoizerModule=(function(){
-		function f(func){
+		var cache={};
+			function f(func){
 			if (typeof func !== 'function'){		
 				throw 'ArgumentError: function expected';
 			}
-			var cache={};
-			return function(n){
-				var value;
-				if(n in cache){
-					value = cache[n];
-					}else{
-					value=func.apply(this, arguments);
-					cache[n] = value;
+			return function(){
+				var key=arguments.length + Array.prototype.join.call(arguments,',');
+				if(!(key in cache)){
+					console.log('cache hasn\'t key '+key);
+					cache[key] = func.apply(this, arguments);
 				}
-				console.log(value);				
-				return value;
+				console.log(cache[key]);				
+				return cache[key];
 			};
 		}
 		return {memoizer:f};
@@ -46,6 +44,7 @@ function factorial(n) {
 	//-------------------------------------------	
 	var n=4;
 	console.log('factorial('+n+'): ');
+	MemoizerModule.memoizer(factorial)(n);
 	MemoizerModule.memoizer(factorial)(n);
 	
 	var str='string';
