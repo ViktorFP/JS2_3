@@ -10,7 +10,7 @@
 			of:function(){return 'method from o';}
 		}
 	};
-	
+	console.log(obj);
 	//Object.freeze(obj);
 	//Object.seal(obj);	
 	Object.defineProperty(obj, 'f', {configurable: false});
@@ -20,15 +20,52 @@
 	var array=debehaviorizer(obj, true);
 	console.log('\narray of behavior:');	
 	printFunctionArray(array);
-	//example for using (it's for me on future :))
-	console.log(array[0]());
+	
+	//merge state with behavior
+	console.log(addMethods(obj,array));
 	//--------------------------
+	function addMethods(obj, fArray){
+		if(arguments.length!==2){
+			return arguments.length===0?{}:obj;
+		}		
+		if(!Array.isArray(fArray)){
+			return obj;
+		}		
+		return (function(){
+			for(var j=0;j<fArray.length;j++){
+				var temp=fArray[j];
+				if(temp){
+					switch(Object.prototype.toString.call(temp).slice(8,-1)){
+						case 'Object':
+						for(var prop in temp){
+							if(typeof temp[prop] === 'function'){
+								obj[prop]=temp[prop];
+							}
+						}
+						break;
+						case 'Array':
+						addMethods(obj,temp);
+						break;
+					}
+				}
+			}
+			return obj;
+		})();
+	}
+	
 	function printFunctionArray(arr){
-		for(var i=0;i<arr.length;i++){
-			if(typeof arr[i] === 'object'){
-				printFunctionArray(arr[i]);
+		for(var pos in arr){
+			if(Array.isArray(arr[pos])){
+				printFunctionArray(arr[pos]);
 				}else{
-				console.log(arr[i]);
+				var temp=arr[pos];
+				if(typeof temp === 'object'){
+					for(var prop in temp){
+						if(prop){
+							console.log(prop+':'+temp[prop]);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -47,12 +84,14 @@
 		function behaviorSeparate(a){
 			'use strict';
 			var behaviorArray=[], position=0;
-			if(typeof a === 'object' && a !== null){			
+			if(typeof a === 'object' && a){			
 				for(var prop in a){				
 					if(prop){
 						switch(typeof a[prop]){
 							case 'function':
-							behaviorArray[position++]=a[prop];
+							var newF={};
+							newF[prop]=a[prop];
+							behaviorArray[position++]=newF;							
 							if(!Object.isFrozen(a) &&
 							!Object.isSealed(a)){
 								try{
