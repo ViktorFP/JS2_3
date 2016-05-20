@@ -30,9 +30,11 @@
 						var attr='',strReturn;
 						if(attStartIdx>-1){
 							attr=rest.substring(attStartIdx+1,attEndIdx);
-							strReturn=rest.substring(attEndIdx+4,rest.length-4);			
-							}else{
-							strReturn=rest.substring(1,rest.length-2);
+							strReturn=rest.substring(attEndIdx+4);					
+							strReturn=strReturn.substring(0,strReturn.search('[|]')-2);						
+							}else{							
+							strReturn=rest.substring(1);	
+							strReturn=strReturn.substring(0,strReturn.search('[|]'));
 						}
 						//WARNING!!!
 						//The Function constructor is a form of eval
