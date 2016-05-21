@@ -88,15 +88,17 @@
 			return str;			
 		}
 		function toString(obj){
+		if(obj){
 			var str=JSON.stringify(obj), finalStr=';';
 			for(var i=1;i<str.length;i++){	
 				finalStr=checkFormat(str[i],finalStr);				
 			}
 			if(arguments[1]){
 				finalStr=printFunction(obj,finalStr);
-				}
-			return finalStr;
+			}
 		}
+		return finalStr;
+	}
 		function printFunction(obj,finalStr){								
 			for(var prop in obj){
 				if(prop && typeof obj[prop]==='function'){

@@ -234,22 +234,26 @@ window.STKit=(function(){
 	/**
 		Function for getting string from object.
 		@param {Object} obj - object
+		@param {Boolean} flag - set 'true' for involve functions
 		@returns {String} string description of object
 		For execution you must write:
-		STKit.objectToStringData(object);
+		STKit.objectToStringData(object[,flag]);
 	*/
 	function toString(obj){
-		var str=JSON.stringify(obj), finalStr=';';
-		for(var i=1;i<str.length;i++){	
-			finalStr=checkFormat(str[i],finalStr);				
-		}
-		if(arguments[1]){
-			finalStr=printFunction(obj,finalStr);
+		if(obj){
+			var str=JSON.stringify(obj), finalStr=';';
+			for(var i=1;i<str.length;i++){	
+				finalStr=checkFormat(str[i],finalStr);				
+			}
+			if(arguments[1]){
+				finalStr=printFunction(obj,finalStr);
+			}
 		}
 		return finalStr;
 	}
 	/**
 		Help function for function toString(obj).
+		@private
 		@see toString
 		@param {Object} obj - object
 		@param {String} finalStr - string description of object
@@ -277,6 +281,7 @@ window.STKit=(function(){
 	}
 	/**
 		Help function for function toString(obj).
+		@private
 		@see toString
 		@param {String} ch - char from string view
 		@param {String} finalStr - string description of object
@@ -311,4 +316,4 @@ window.STKit=(function(){
 		printObjectView:objDataToString,
 		objectToStringData:toString
 	};
-}());
+}());	
