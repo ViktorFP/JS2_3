@@ -26,6 +26,7 @@
 	var MemoizerModule=(function(){
 		var cache={};
 		function f(func){
+			if(func){
 			if (typeof func !== 'function'){		
 				throw 'ArgumentError: function expected';
 			}
@@ -38,6 +39,8 @@
 				console.log(cache[key]);				
 				return cache[key];
 			};
+		}
+		return null;
 		}
 		return {memoizer:f};
 	})();
