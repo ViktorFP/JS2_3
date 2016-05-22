@@ -309,7 +309,30 @@ window.STKit=(function(){
 		return finalStr;
 	}
 	//--
+	/**
+		Determine is given argument array (or array like) or not
+		@param {Object} obj - object for check
+		@returns {Boolean} true|false
+	*/
+	function isArrayLike(obj){
+		var isArray=function(){
+			return Function.isArray || (function(){
+			return (typeof obj === 'object' && Object.prototype.toString.call(obj) === '[object Array]');}());       
+		};
+		
+		function likeArray() {
+			if (obj && typeof obj === 'object' &&
+			isFinite(obj.length) && obj.length >= 0 &&
+			obj.length===Math.floor(obj.length) && 
+			obj.length < 4294967296)//obj.length < 2^32
+			{return true;}
+			return false;			
+		}		
+		return isArray() || likeArray();
+	}
+	//--
 	return {memoizer:memo,
+		arrayChecker:isArrayLike,
 		debehaviorizer:behavior,
 		addMethods:methods,
 		stringToObject:createObj,

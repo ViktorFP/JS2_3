@@ -27,20 +27,20 @@
 		var cache={};
 		function f(func){
 			if(func){
-			if (typeof func !== 'function'){		
-				throw 'ArgumentError: function expected';
-			}
-			return function(){
-				var key=arguments.length + Array.prototype.join.call(arguments,',');
-				if(!(key in cache)){
-					console.log('cache don\'t has key '+key);
-					cache[key] = func.apply(this, arguments);
+				if (typeof func !== 'function'){		
+					throw 'ArgumentError: function expected';
 				}
-				console.log(cache[key]);				
-				return cache[key];
-			};
-		}
-		return null;
+				return function(){
+					var key=arguments.length + Array.prototype.join.call(arguments,',');
+					if(!(key in cache)){
+						console.log('cache don\'t has key '+key);
+						cache[key] = func.apply(this, arguments);
+					}
+					console.log(cache[key]);				
+					return cache[key];
+				};
+			}
+			return null;
 		}
 		return {memoizer:f};
 	})();
@@ -50,12 +50,12 @@
 	console.log('factorial('+n+'): ');
 	MemoizerModule.memoizer(factorial)(n);
 	MemoizerModule.memoizer(factorial)(n);
-	
-	var str='string';
-	console.log('\nReverse String \''+str+'\': ');
-	MemoizerModule.memoizer(reverseString)(str);
-	//...and with functions which apply several arguments
-	console.log('\ngenerate array:');
-	MemoizerModule.memoizer(getIntArray)(10,10);
-	//no different)
+
+var str='string';
+console.log('\nReverse String \''+str+'\': ');
+MemoizerModule.memoizer(reverseString)(str);
+//...and with functions which apply several arguments
+console.log('\ngenerate array:');
+MemoizerModule.memoizer(getIntArray)(10,10);
+//no different)
 }());
